@@ -1,0 +1,18 @@
+version: 3
+
+tasks:
+  build:
+    cmds:
+      - dotnet restore
+      - dotnet build ./src/ic11/ic11.csproj -c Release --no-restore
+
+  install:
+    cmds:
+      - rm -rf ~/.local/bin/ic11
+      - cp -R ./src/ic11/bin/Release/net9.0 ~/.local/bin/ic11
+
+  build-extension:
+    dir: extension
+    cmds:
+      - npm install -g vsce
+      - vsce package --allow-missing-repository
