@@ -14,9 +14,7 @@ tasks:
 
   build-extension:
     dir: extension
-    cmds:
-      - npm install -g vsce
-      - vsce package --allow-missing-repository
+    cmd: vsce package --allow-missing-repository
 
   generate:
     dir: grammars
