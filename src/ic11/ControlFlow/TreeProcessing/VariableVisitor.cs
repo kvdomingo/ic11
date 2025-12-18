@@ -147,6 +147,13 @@ public class VariableVisitor : ControlFlowTreeVisitorBase<Variable?>
 
     private Variable? Visit(UserDefinedValueAccess node)
     {
+        // Check builtin constants first
+        if (BuiltinConstants.TryGetValue(node.Name, out var builtinConstantName))
+        {
+            node.BuiltinConstantName = builtinConstantName;
+            return null;
+        }
+
         if (node.Scope!.TryGetUserVariable(node.Name, out var userDefinedVariable))
         {
             node.Variable = userDefinedVariable.Variable;
@@ -166,6 +173,19 @@ public class VariableVisitor : ControlFlowTreeVisitorBase<Variable?>
 
         throw new Exception($"'{node.Name}' is not defined");
     }
+
+    private static readonly Dictionary<string, string> BuiltinConstants = new()
+    {
+        { "Pi", "pi" },
+        { "Tau", "tau" },
+        { "Epsilon", "epsilon" },
+        { "NaN", "nan" },
+        { "PInf", "pinf" },
+        { "NInf", "ninf" },
+        { "Deg2Rad", "deg2rad" },
+        { "Rad2Deg", "rad2deg" },
+        { "RGas", "rgas" }
+    };
 
     private Variable? Visit(PinDeclaration node)
     {

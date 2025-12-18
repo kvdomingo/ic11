@@ -7,6 +7,7 @@ public class UserDefinedValueAccess : Node, IExpression
     public string Name;
     public Variable? Variable { get; set; }
     public decimal? CtKnownValue { get; set; }
+    public string? BuiltinConstantName { get; set; }
 
     public UserDefinedValueAccess(string name)
     {
