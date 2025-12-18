@@ -4,6 +4,7 @@ tasks:
   build:
     cmds:
       - dotnet restore
+      - task: generate
       - dotnet build ./src/ic11/ic11.csproj -c Release --no-restore
 
   install:
@@ -16,3 +17,7 @@ tasks:
     cmds:
       - npm install -g vsce
       - vsce package --allow-missing-repository
+
+  generate:
+    dir: grammars
+    cmd: antlr4 -o ../src/ic11/generated -visitor Ic11.g4

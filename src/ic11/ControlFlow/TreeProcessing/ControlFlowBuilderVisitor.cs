@@ -149,8 +149,15 @@ public class ControlFlowBuilderVisitor : Ic11BaseVisitor<Node?>
     {
         var value = context.GetText();
 
-        if (context.type.Type == STRING_LITERAL)
-            return new Literal(OperationHelper.Hash(value.Trim('"')));
+        switch (context.type.Type)
+        {
+            case STRING_LITERAL:
+                return new Literal(OperationHelper.ToASCII(value.Trim('\'')));
+            case HASH_LITERAL:
+                return new Literal(OperationHelper.Hash(value.Trim('"')));
+            case HASH_LITERAL_2:
+                return new Literal(OperationHelper.Hash(value.TrimStart('#')));
+        }
 
         if (value == "true")
             value = "1";

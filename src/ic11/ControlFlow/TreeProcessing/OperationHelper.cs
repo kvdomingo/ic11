@@ -48,4 +48,24 @@ public static class OperationHelper
 
     public static decimal Hash(string input) =>
         (int)Crc32.HashToUInt32(Encoding.ASCII.GetBytes(input));
+
+    public static decimal ToASCII(string input) 
+    {
+        if (input.Length > 8)
+        {
+            throw new InvalidOperationException("String is too long to convert");
+        }
+        long result = 0;
+        foreach (char c in input)
+        {
+            if (!char.IsAscii(c))
+            {
+                throw new InvalidOperationException("String contains non-ASCII characters");
+            }
+
+            result <<= 8;
+            result |= (byte)c;
+        }
+        return result;
+    }
 }
