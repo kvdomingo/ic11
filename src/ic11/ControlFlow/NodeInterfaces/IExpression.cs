@@ -7,7 +7,19 @@ public interface IExpression
 {
     Variable? Variable { get; set; }
     decimal? CtKnownValue { get; }
-    string Render() => CtKnownValue?.ToString(CultureInfo.InvariantCulture) ?? Variable!.Register;
+    string Render() => GetRenderString(this);
+
+    private static string GetRenderString(IExpression expression)
+    {
+        // Check for builtin constants first
+        if (expression is UserDefinedValueAccess userAccess && userAccess.BuiltinConstantName is not null)
+            return userAccess.BuiltinConstantName;
+
+        if (expression.CtKnownValue.HasValue)
+            return expression.CtKnownValue.Value.ToString(CultureInfo.InvariantCulture);
+
+        return expression.Variable?.Register ?? throw new Exception("Expression has no variable or constant value");
+    }
 
     public int FirstIndexInTree => GetFirstExpressionIndex(this);
 
